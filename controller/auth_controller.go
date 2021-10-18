@@ -1,12 +1,12 @@
 package controller
 
 import (
+	"log"
 	"strconv"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt"
-	"github.com/oinpentuls/auth-with-fiber/models"
 	"github.com/oinpentuls/auth-with-fiber/repositories"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -14,13 +14,14 @@ import (
 var SecretKey = []byte("secret")
 
 func Register(c *fiber.Ctx) error {
-	var user models.User
+	var data map[string]string
 
-	if err := c.BodyParser(&user); err != nil {
+	if err := c.BodyParser(&data); err != nil {
 		return err
 	}
+	log.Println(data)
 
-	result, err := repositories.StoreUser(user)
+	result, err := repositories.StoreUser(data)
 
 	if err != nil {
 		return err
