@@ -9,15 +9,16 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-func StoreUser(user models.User) (models.User, error) {
+func StoreUser(data map[string]string) (models.User, error) {
 	db := database.DB
 
-	password, _ := bcrypt.GenerateFromPassword([]byte(user.Password), 14)
+	var user models.User
+	password, _ := bcrypt.GenerateFromPassword([]byte(data["password"]), 14)
 
 	res, err := db.Exec(
 		`INSERT INTO users (name, email, password) 
 		VALUES (?, ?, ?)`,
-		user.Name, user.Email, password)
+		data["name"], data["email"], password)
 
 	if err != nil {
 		return user, err
